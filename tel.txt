@@ -1,8 +1,20 @@
+import getpass
+import sys
 import telnetlib
-command = 'cd /home/ram/Desktop/'
-tn= telnetlib.Telnet('192.168.10.170')
-tn.set_debuglevel(9)
-tn.read_until('login: ', 5)
-tn.write('ram\n')
-tn.read_until('Password: ', 5)
-tn.write('password\n')
+
+HOST = "localhost"
+user = raw_input("Enter your remote account: ")
+password = getpass.getpass()
+
+tn = telnetlib.Telnet(HOST)
+
+tn.read_until("login: ")
+tn.write(user + "\n")
+if password:
+    tn.read_until("Password: ")
+    tn.write(password + "\n")
+
+tn.write("ls\n")
+tn.write("exit\n")
+
+print tn.read_all()
